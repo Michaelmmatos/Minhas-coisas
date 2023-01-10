@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	
+    <script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript" src="dolmsfunctions.js"></script>
+	<script type="text/javascript" src="scormfs.js"></script>	
+	<script type="text/javascript" src="https://cdn.ctat.cs.cmu.edu/releases/latest/ctat.min.js"></script>
+			
+    <style type="text/css">
+				
+	html
+	{
+		margin: 0;
+		padding: 0;		
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+	}
+
+	body 
+	{
+		width: 100%;
+		height: 100%;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;		
+	}
+				
+    </style>
+	    
+    <style type="text/css">
+				
+	html
+	{
+		margin: 0;
+		padding: 0;		
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+	}
+
+	body 
+	{
+		width: 100%;
+		height: 100%;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;		
+	}
+				
+    </style>
+	    
+    <script language="javascript">
+        	
+	var useDebugging=true;
+	var noScrim=true;
+	var sequencer=new CTATSequencer ();
+	var interfacePath="ctatcontent";
+	var problemPath="";
+	var mode="SCORM";
+	var tsHost="localhost";
+	var tsPort="4000";
+	var logURL="https://pslc-qa.andrew.cmu.edu/log/server";
+	var dataSet="CTAT Dataset";
+	var commSettting="javascript";
+	var logging="None";
+
+	var formattedPath=problemPath;
+	
+	if (formattedPath!="")
+	{
+		formattedPath=problemPath+"/";
+	}
+	
+	function sequenceReady ()
+	{
+		var firstProblem=sequencer.getFirstProblem ();
+		
+		if (firstProblem!=null)
+		{
+			ctatdebug ("Starting first problem: " + firstProblem.getName () + ", " + firstProblem.getStudentInterface () + ", " + firstProblem.getProblemFile ());
+			
+			$("#outterframe").attr('src', interfacePath + "/" + firstProblem.getStudentInterface () + "?CONNECTION="+commSettting+"&REMOTEURL="+tsHost+"&PORT="+tsPort+"&log_service_url="+logURL+"&DATASET="+dataSet+"&MODE=" + mode + "&LEVEL1="+firstProblem.getProblemFile ()+"&TYPE1=Unit1&PROBLEM="+firstProblem.getProblemFile ()+"&BRD=" + formattedPath + firstProblem.getProblemFile ()+"&Logging="+logging);
+		}
+		else
+		{
+			ctatdebug ("Error: unable to retrieve first problem");
+		}	
+	}
+	
+	/**
+	*
+	*/
+	function sequence ()
+	{
+		ctatdebug ("Sequence ()");
+				
+		sequencer.init ("package.xml",sequenceReady);
+	}	
+	
+	</script>	
+	    
+</head>
+<body onLoad="sequence ()">
+	<iframe id="outterframe" src="" style="" width="100%" height="100%" frameBorder="0">
+	Loading tutor, please wait ...
+	</iframe>
+</body>
+</html>
